@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Citrix</title>
+    <!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+    @*<link title=www rel=stylesheet type=text/css href="//1.www.s81c.com/common/v17/css/www.css">*@
+    <!-- Masthead/footer -->
+    @*<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">*@
+    
+    @* Put site.css at higher priority by moving it to the end of the list of css files to use *@
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div id="masthead" role="banner">
+        <div id=dw-masthead-top-row class="container">
+            <ul role=toolbar id=mast-options-dw>
+                <li><div>@Html.Partial("_LoginPartial") </div></li>
+        </ul>
+    </div>
+        <div id="universal-nav-dw" aria-label="Site map" class="container">
+        		<div class="client-logo"></div>
+        		<div class="cd-logo"></div>
+
+    <ul id="ks-menu-links-dw" role="toolbar" aria-label="Site map">
+@if (Request.IsAuthenticated)
+{
+    <li id="dw-mast-nav-0" role="presentation">
+        @if (!Request.RawUrl.Contains("DesktopImages") && !Request.RawUrl.Contains("DesktopGroups"))
+        {
+        @Html.ActionLink("Dashboard", "Index", "Services", new { @class = "active" })
+        }
+        else
+        {
+            @Html.ActionLink("Dashboard", "Index", "Services")
+        }
+    </li>
+        <li id="dw-mast-nav-0" role="presentation">
+            @Html.ActionLink("Desktop Images", "DesktopImages", "Service", new { @class = (Request.RawUrl.Contains("DesktopImages") ? "active" : null) })
+        </li>
+        <li id="dw-mast-nav-1" role="presentation" class="@(Request.RawUrl.Contains("DesktopGroups") ? "active" : null)">
+            @Html.ActionLink("Desktop Groups", "DesktopGroups", "Services", new { @class = (Request.RawUrl.Contains("DesktopGroups") ? "active" : null)}))
+        </li>
+}
+    </ul>
+        </div>
+    </div>
+    <div class="container body-content" style="position:relative">
+       @RenderBody()
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Citrix</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

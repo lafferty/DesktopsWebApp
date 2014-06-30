@@ -1,0 +1,76 @@
+﻿@model DT2.Models.Template
+
+@{
+    ViewBag.Title = "Upload Image";
+}
+<div style="margin:10px">
+    <h2 id="clddsk-page-header" class="h2-alternate"><a>Desktop Images</a> &raquo; @ViewBag.Title</h2>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal ctx-table-styled">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new {@class = "control-label col-md-2"})
+            <div>
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new {@class = "control-label col-md-2"})
+            <div>
+                @Html.EditorFor(model => model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DesktopType, new {@class = "control-label col-md-2"})
+            <div>
+                @Html.DropDownListFor(model => model.DesktopType, new SelectList(@DT2.Models.Template.DesktopTypeOptions, "Id", "Name"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OsType, new {@class = "control-label col-md-2"})
+            <div>
+                @Html.DropDownListFor(model => model.OsType, new SelectList(@DT2.Models.Template.OsTypeOptions, "Id", "Name"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Url, new {@class = "control-label col-md-2"})
+            <div>
+                @Html.EditorFor(model => model.Url)
+                @Html.ValidationMessageFor(model => model.Url)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Upload" class="btn btn-default emp" />
+                <button onclick=" location.href = '@Url.Action("DesktopImages", "Services")';return false; " class="btn btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jquerywatermark")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Url").watermark("http://yourhost.local/imgs/your_img.vhd");
+        $("#Description").watermark("Admin Custom Image");
+        $("#Name").watermark("MyCustomImage");
+    });
+</script>
+
+}
+
+

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<DT2.Models.Catalog>
+
+@{
+    ViewBag.Title = "Desktop Groups";
+    int counter = 0;
+}
+<div>
+    <div style="float:left; margin:10px">
+        <h2 id="clddsk-page-header" class="h2-alternate">@ViewBag.Title</h2>
+    </div>
+    <div style="float: right; margin: 10px; color:#54BFED;">
+        @using (Html.BeginForm("DesktopGroupsAdd", null, null, FormMethod.Get))
+        {
+            <button type="submit" class="btn btn-default emp">Create Desktop Group</button>
+        }
+    </div>
+</div>
+<div class="ctx-table-styled">
+<table class="table">
+    <tr style="font-weight:bold;" class="row_0">
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DesktopType)
+        </th>
+        <th class="centeredtext">
+            @Html.DisplayNameFor(model => model.Count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        counter = (counter + 1) % 2;
+        <tr class="@("row_"+counter)">
+            <td>
+@if (item.Id != null) {
+                @Html.ActionLink(@item.Name, "DesktopGroupsDetails", new {name = item.Name})
+} else { 
+                @Html.DisplayFor(modelItem => item.Name)
+}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DesktopType)
+            </td>
+            <td class="centeredtext">
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+    @*@Html.ActionLink("Update", "DesktopGroupsModify", new {name = item.Name});|*@
+@if (item.Id != null)
+{
+    @Html.ActionLink("Delete", "DesktopGroupsDelete", new { name = item.Name }, new { onclick = "return confirm('Are you sure you want to delete?')" });
+}
+            </td>
+        </tr>
+    }
+    <tr>
+        <th />
+        <th />
+        <th />
+        <th />
+        <th />
+        <th />
+    </tr>
+</table>
+</div>

@@ -1,0 +1,61 @@
+﻿@model DT2.Models.Template
+
+@{
+    ViewBag.Title = "Image Details";
+}
+<div>
+    <div style="float:left; margin:10px">
+        <h2 id="clddsk-page-header" class="h2-alternate"><a>Desktop Images</a> &raquo; @ViewBag.Title</h2>
+    </div>
+    <div style="float: right; margin: 10px; color:#54BFED;">
+        @using (Html.BeginForm("DesktopImages", null, null, FormMethod.Get))
+        {
+            <button type="submit" style="color: #07A1E7; border-color: #07A1E7; border-width:2px; font-weight:600" class="btn btn-default">Back to Desktop Images</button>
+        }
+    </div>
+</div>
+
+<div class="ctx-table-styled">
+    <table class="table">
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.Name)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.Name)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.Description)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.Description)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.DesktopType)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.DesktopType)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.Ready)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.Ready)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.OsType)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.OsType)
+            </td>
+        </tr>
+    </table>
+</div>

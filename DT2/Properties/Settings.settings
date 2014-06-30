@@ -1,0 +1,57 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DT2.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CloudStackSecretKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">G379F22wYG_ISyG4Y-0saikSyUQNf9hVozwcep-LqsGNRvSBx81bN-mZ1bDyckMYNItYypIfzjU-MlFrS5IEIw</Value>
+    </Setting>
+    <Setting Name="CloudStackApiKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">NTbOqdGSM2KWzS0GIMO9fBO6TiKb2oEKo59t7hmPWNna4rQtftX3sarCO-sAMXfL8l3zm55mND__53bV-wyZrA</Value>
+    </Setting>
+    <Setting Name="CloudStackHypervisor" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">XenServer</Value>
+    </Setting>
+    <Setting Name="XenDesktopAdminAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">xdc1.clouddesktop.cambourne.cloud.com:80</Value>
+    </Setting>
+    <Setting Name="XenDesktopHostingUnitName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">CloudPlatformHost</Value>
+    </Setting>
+    <Setting Name="XenDesktopDomain" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">clouddesktop.cambourne.cloud.com</Value>
+    </Setting>
+    <Setting Name="XenDesktopDDC" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">xdc1.clouddesktop.cambourne.cloud.com</Value>
+    </Setting>
+    <Setting Name="XenDesktopAvailabilityZone" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Zone1</Value>
+    </Setting>
+    <Setting Name="CloudStackZoneId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">2d1fe3c7-33bd-4e02-94a9-55ba34321942</Value>
+    </Setting>
+    <Setting Name="TestDisableCatalogCreate" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="XenDesktopStoreFrontUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://192.168.0.50/Citrix/StoreWeb/</Value>
+    </Setting>
+    <Setting Name="CloudStackUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://192.168.2.1:8080/client/api</Value>
+    </Setting>
+    <Setting Name="LdapPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">LDAP://CN=users,DC=clouddesktop,DC=cambourne,DC=cloud,DC=com</Value>
+    </Setting>
+    <Setting Name="SecurityGroups" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="PowerShellScriptsFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Users\administrator.CLOUDDESKTOP\Documents\GitHub\CloudDesktop\DT2\Utils</Value>
+    </Setting>
+    <Setting Name="CheckUserForCreatePrivileges" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="templatefilter" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">executable</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

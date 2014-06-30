@@ -1,0 +1,152 @@
+﻿@model DT2.Models.CatalogDetailsViewModel
+
+@{
+    ViewBag.Title = "Group Details";
+    int counter = 0;
+}
+<div>
+    <div style="float:left; margin:10px">
+        <h2 id="clddsk-page-header" class="h2-alternate"><a>Desktop Groups</a> &raquo; @ViewBag.Title</h2>
+    </div>
+    <div style="float: right; margin: 10px; color:#54BFED;">
+        @using (Html.BeginForm("DesktopGroups", null, null, FormMethod.Get))
+        {
+            <button type="submit" style="color: #07A1E7; border-color: #07A1E7; border-width:2px; font-weight:600" class="btn btn-default">Back to Desktop Groups</button>
+        }
+    </div>
+</div>
+<div class="ctx-table-styled">
+    <table class="table">
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Name)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.Name)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Description)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.Description)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.DesktopType)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.DesktopType)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Status)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.Status)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Template)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.Template)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.ComputeOffering)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.ComputeOffering)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.DiskSize)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.DiskSize) GiB
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Network)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.Network)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_0">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Count)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DisplayFor(model => model.CatalogInfo.Count)
+            </td>
+        </tr>
+        <tr style="font-weight:bold;" class="row_1">
+            <td>
+                @Html.DisplayNameFor(model => model.CatalogInfo.Users)
+            </td>
+            <td style="font-weight:normal">
+                @Html.DropDownListFor(model => model.CatalogInfo.Users, new SelectList(Model.CatalogInfo.Users), new { @size = "6", @style = "width: 400px" })
+            </td>
+        </tr>
+
+    </table>
+    </div>
+<div>
+    <div style="float:left">
+        <h2 id="clddsk-page-header" class="h2-alternate">Desktops</h2>
+    </div>
+
+</div>
+<div class="ctx-table-styled">
+    <table class="table">
+        <tr style="font-weight:bold;" class="row_0">
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Machines[0].DNSName)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Machines[0].MachineName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Machines[0].AssociatedUserNames)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Machines[0].PowerState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Machines[0].RegistrationState)
+            </th>
+        </tr>
+
+        @foreach (DT2.Models.Machine item in Model.Machines)
+        {
+            counter = (counter + 1) % 2;
+            <tr class="@("row_"+counter)">
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.DNSName)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MachineName)
+                </td>
+                <td>
+                    @*TODO: how do we deal with no or multiple users?*@
+                    @Html.DisplayFor(modelItem => item.AssociatedUserNames[0])
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PowerState)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationState)
+                </td>
+            </tr>
+        }
+    </table>
+</div>

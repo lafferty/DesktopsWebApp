@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="RequireNet45">This setup requires the .NET Framework 4.5 be installed.</String>
+  <String Id="RequireIis7">This setup requires IIS 7.0 or higher be installed.</String>
+  <String Id="RequireAdmin">You need to be an administrator to install this product.</String>
+  <String Id="SpecifyWebSite">Please select the web site for the application installation.</String>
+</WixLocalization>

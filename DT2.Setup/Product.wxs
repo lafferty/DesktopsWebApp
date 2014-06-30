@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	
+	
+	<Product Id="7b9fba37-b0f7-42c5-b16d-88ce5594ca4e" Name="Citrix Desktop WebApp" Language="1033" Version="14.04.25" Manufacturer="Citrix Systems, Inc." UpgradeCode="98b7b2d2-d26b-4141-8a0d-888d7e0c0d7b">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		
+		<!-- Icon and link for programs & features list" -->
+		<Icon Id="XenDesktop_Combo_All.ico" SourceFile="000_XenDesktop_Combo_All.ico" />
+		<Property Id="ARPPRODUCTICON" Value="XenDesktop_Combo_All.ico" />
+		<Property Id="ARPHELPLINK" Value="http://community.citrix.com/" />
+		
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+		
+		<!-- All installation pre-conditions -->
+		<?include Conditions.wxi ?>
+
+		<Feature Id="ProductFeature" Title="Citrix Desktop WebApp" Level="1">
+			<ComponentGroupRef Id="DT2_Project" />
+			<ComponentRef Id="DT2WebVDir" />
+		</Feature>
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="inetpub" Name="inetpub">
+				<Directory Id="wwwroot" Name="wwwroot" ComponentGuidGenerationSeed="42a9520f-c8d2-4bb6-bb8a-5497ffe19263">
+					<Directory Id="INSTALLFOLDER1" Name="Citrix">
+						<Directory Id="INSTALLFOLDER" Name="CloudDesktop">
+							
+							<Component Id="DT2WebVDir" Guid="88ec6b20-979e-470c-80be-b41c735cf2db">
+
+								<iis:WebAppPool Id="AppPool" Name="[APPPOOLNAME]" ManagedRuntimeVersion="v4.0" IdleTimeout="0" RecycleMinutes="0" ManagedPipelineMode="integrated">
+								</iis:WebAppPool>       
+
+								<iis:WebVirtualDir Id="VirtualDir" Alias="[WEBAPPNAME]" Directory="INSTALLFOLDER" WebSite="SelectedWebSite">             
+									<iis:WebApplication Id="DT2WebApp" WebAppPool="AppPool" Name="[WEBAPPNAME]" />              
+									<iis:WebDirProperties Id="DT2WebVDir_Properties" AnonymousAccess="yes" WindowsAuthentication="no" />               
+								</iis:WebVirtualDir>
+								
+								<CreateFolder />
+							</Component>  
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+		
+		<Property Id="WEBSITENAME" Value="Default Web Site" />
+		<Property Id="WEBAPPNAME" Value="Citrix/CloudDesktop" />
+		<Property Id="APPPOOLNAME" Value="CloudDesktop_Pool" />
+		
+		<!-- Note this does not create a web site, just looks it up -->
+		<iis:WebSite Id="SelectedWebSite" Description="[WEBSITENAME]" Directory="INSTALLFOLDER">
+			<!-- This element has to be here or WiX does not compile. -->
+			<iis:WebAddress Id="AllUnassigned" Port="80" />
+		</iis:WebSite>
+	</Product>
+</Wix>

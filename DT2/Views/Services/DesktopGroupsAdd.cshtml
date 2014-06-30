@@ -1,0 +1,211 @@
+﻿@model DT2.Models.Catalog
+
+@{
+    ViewBag.Title = "Create Group";
+}
+<style>
+    input
+    {
+        max-width: 400px;
+    }
+    .text-box, .single-line, select {
+        max-width: 400px;
+        width: 400px;
+    }
+</style>
+<div>
+    <div style="margin:10px">
+        <h2 id="clddsk-page-header" class="h2-alternate"><a>Desktop Groups</a> &raquo; @ViewBag.Title</h2>
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal ctx-table-styled">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2 " })
+            <div class="wide-input">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DesktopType, new { @class = "control-label col-md-2" })
+            <div>
+                @Html.DropDownListFor(model => model.DesktopType, new SelectList(ViewBag.DesktopTypes, "Id", "Name"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Template, new { @class = "control-label col-md-2" })
+            <div>
+                @*TODO: disable until the pool type is seleted?*@
+                @Html.DropDownListFor(model => model.Template, new SelectList(ViewBag.Templates, "InventoryPath", "Name"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ComputeOffering, new { @class = "control-label col-md-2" })
+            <div>
+                @Html.DropDownListFor(model => model.ComputeOffering, new SelectList(ViewBag.ComputeOfferings, "Id", "Name"))
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Count, new { @class = "control-label col-md-2" })
+            <div>
+                @Html.EditorFor(model => model.Count)
+                @Html.ValidationMessageFor(model => model.Count)
+            </div>
+        </div>
+        <h2 class="h2-alternate">Assign Users to Desktop</h2>
+				<div class="group-search">
+        <div class="form-group">
+	            @Html.Label("User / Group search", new { @class = "control-label col-md-2" })
+	            <div class="wide-input">
+	                @Html.TextBox("usersearchpattern", "*", new { @class = "text-box" })
+	                <input type="button" id="usersearch" value="Search" class="btn btn-default" /><br />
+            </div>
+        </div>
+        <div class="form-group">
+            <table style="border-width: 0px;">
+                <tr>
+                    <td style="border-width: 0px;">@Html.Label("Users / Groups search results", new { @class = "control-label col-md-2" })</td>
+                    <td style ="border-width: 0px;"></td>
+                    <td style="border-width: 0px;">@Html.Label("Selections", new { @class = "control-label col-md-2" })@Html.ValidationMessageFor(model => model.Users)</td>
+                </tr>
+                <tr>
+                    <td style="border-width: 0px;">@Html.ListBox("availableusers", new SelectList(ViewBag.AvailableUsers, "Id", "Name"), new { @size = "6", @style = "min-width: 250px" })</td>
+                    <td style="border-width: 0px;">
+                        <input type="button" id="usradd" value="&raquo;" class="btn btn-default btn-narrow" />
+                        <input type="button" id="usrrmv" value="&laquo;" class="btn btn-default btn-narrow" />
+                    </td>
+                    <td style="border-width: 0px;">@Html.ListBoxFor(model => model.Users, new SelectList(new string[0], "Id", "Name"), new { @size = "6", @style = "min-width: 250px" })</td>
+                    
+                </tr>
+            </table>
+
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Create" class="btn btn-default emp" />
+                <button onclick="location.href='@Url.Action("DesktopGroups", "Services")';return false;" class="btn btn-default">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquerywatermark")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#DesktopType").change(function() {
+                    var options = {};
+                    options.url = '@Url.Action("GetValidTemplates", "Services")';
+                    options.type = "POST";
+                    options.dataType = "json";
+                    options.data = JSON.stringify({ desktopType: $("#DesktopType").val() });
+                    options.contentType = "application/json";
+                    options.success = function(templates) {
+                        $("#Template").empty();
+                        for (var i = 0; i < templates.length; i++) {
+                            $("#Template").append('<option value="' + templates[i].Id + '">' + templates[i].Name + "</option>");
+                        }
+                        $("#Template").prop("disabled", false);
+                    };
+                    options.error = function() { alert("Error retrieving states!"); };
+                    $.ajax(options);
+                }
+            )
+
+            var options = {};
+            options.url = '@Url.Action("GetValidTemplates", "Services")';
+            options.type = "POST";
+            options.dataType = "json";
+            options.data = JSON.stringify({ desktopType: $("#DesktopType").val() });
+            options.contentType = "application/json";
+            options.success = function (templates) {
+                $("#Template").empty();
+                for (var i = 0; i < templates.length; i++) {
+                    $("#Template").append('<option value="' + templates[i].Id + '">' + templates[i].Name + "</option>");
+                }
+                $("#Template").prop("disabled", false);
+            };
+            options.error = function(req, status, err) {
+                console.error("Your login has expired (Status: %s (%s))", status, err);
+            };
+
+            options.error = function () { alert("Error retrieving states!"); };
+            $.ajax(options);
+        })
+
+        function SortList(listname) {
+            var $r = $(listname + " option");
+            $r.sort(function(a, b) { return (a.value < b.value) ? -1 : (a.value > b.value) ? 1 : 0; });
+            $($r).remove();
+            $(listname).append($($r));
+        }
+
+        $("#usradd").click(function() {
+            var selectedItem = $("#availableusers option:selected");
+            $("#Users").append(selectedItem);
+            $("#availableusers").remove("#availableusers option:selected");
+            SortList("#Users");
+        });
+
+        $("#usrrmv").click(function() {
+            var selectedItem = $("#Users option:selected");
+            $("#availableusers").append(selectedItem);
+            $("#Users").remove("#Users option:selected");
+            SortList("#availableusers");
+        });
+
+        $("#usersearch").click(function() {
+            var searchPattern = $("#usersearchpattern").val();
+
+            $.ajax({
+                url: '@Url.Action("GetUsers", "Services")',
+                type: "POST",
+                dataType: "json",
+
+                // query will be the param used by your action method
+                data: { query: searchPattern },
+
+                // On success, we need to update #availableusers 
+                success: function(data) {
+                    // Update #availableusers with incoming data
+                    // data is in JSON
+                    console.log("received a %s items, in data %s", data.length, data);
+                    $("#availableusers").empty();
+                    for (var i = 0; i < data.length; i++) {
+                        console.log("adding " + data[i].Name);
+                        $("#availableusers").append('<option value="' + data[i].Id + '">' + data[i].Name + "</option>");
+                    }
+                    SortList("#Users");
+                },
+                error: function(req, status, err) {
+                    console.error("Your login has expired (Status: %s (%s))", status, err);
+                }
+            })
+        });
+    </script>
+}
+
+

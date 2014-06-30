@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <!-- Require administrator privileges -->
+  <Condition Message="!(loc.RequireAdmin)">Privileged</Condition>
+
+  <!-- Require .NET 4.5  -->
+  <PropertyRef Id="NETFRAMEWORK45" />
+  <Condition Message='!(loc.RequireNet45)'><![CDATA[(Installed OR NETFRAMEWORK45)]]></Condition>
+  
+  <!-- Require IIS 7 or higher -->
+  <PropertyRef Id="IISMAJORVERSION"/>
+  <Condition Message="!(loc.RequireIis7)">
+    <![CDATA[Installed OR (IISMAJORVERSION >= "#7")]]>
+  </Condition>
+
+</Include>
