@@ -42,6 +42,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Citrix.CPBM.Client.Sample, Version=2.2.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Citrix.CPBM.Client.Sample.2.2.0.1\lib\net40\Citrix.CPBM.Client.Sample.dll</HintPath>
+    </Reference>
     <Reference Include="CloudStack.SDK">
       <HintPath>..\packages\CloudStack.SDK.2.2.0.5\lib\net40\CloudStack.SDK.dll</HintPath>
     </Reference>
@@ -52,6 +56,10 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -110,10 +118,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <Private>True</Private>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -187,6 +191,8 @@
     <Compile Include="Models\Catalog.cs" />
     <Compile Include="Models\Machine.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ProductBundle.cs" />
+    <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\XenDesktopInventoryItem.cs" />
     <Compile Include="Utils\ScriptNames.cs" />
     <Compile Include="Models\Template.cs" />
@@ -202,6 +208,8 @@
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\ACMECloudServiceLogin.jpg" />
@@ -281,8 +289,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <None Include="Properties\PublishProfiles\LocalIIS.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -290,6 +301,42 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\adapters\mootools-adapter.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\adapters\mootools-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\adapters\prototype-adapter.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\adapters\prototype-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\adapters\standalone-framework.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\adapters\standalone-framework.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\highcharts-all.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\highcharts-more.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\highcharts-more.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\highcharts.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\highcharts.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\annotations.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\annotations.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\canvas-tools.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\canvas-tools.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\data.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\data.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\drilldown.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\drilldown.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\exporting.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\exporting.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\funnel.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\funnel.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\heatmap.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\heatmap.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\map.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\map.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\no-data-to-display.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\modules\no-data-to-display.src.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\themes\dark-blue.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\themes\dark-green.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\themes\gray.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\themes\grid.js" />
+    <Content Include="Scripts\Highcharts-3.0.9\js\themes\skies.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -301,6 +348,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\jquery.watermark.js" />
     <Content Include="Scripts\jquery.watermark.min.js" />
+    <Content Include="Scripts\knockout-3.1.0.debug.js" />
+    <Content Include="Scripts\knockout-3.1.0.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -378,14 +427,12 @@
     <Content Include="Utils\SetMachinePowerState.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Services\DesktopGroupsAddEx.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="log\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>

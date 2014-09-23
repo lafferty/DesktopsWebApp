@@ -8,6 +8,14 @@ CloudStack.  The broker services allow users to connect to these desktops using 
 Citrix Receiver uses the ICA remote access protocol
 
 
+## Updates
+
+This update demonstrates CloudPortal Business Manager (CPBM) integration.  Specifically, Desktop
+Group creation allows you to select the CPBM billing package you want to use for the VMs being
+created.  This functionality makes use of the BSS API available with CPBM (E.g. 
+http://support.citrix.com/proddocs/topic/cpbm-22-map/cpbm-overview-con.html )
+
+
 ## Getting started
 
 The source includes a Microsoft Visual Studio 2013 solution called DT2.sln.  Load this solution 
@@ -62,8 +70,11 @@ each setting are given in the web.config section below.
 Update the settings for the IIS settings that govern the WebApp's application pool.  Details of 
 important settings are given in the IIS Settings section below.
 
-Finally, update the CloudPlatform templates and service offerings to limit what is presented to 
+Next, update the CloudPlatform templates and service offerings to limit what is presented to 
 the webapp user.  See the Displaying CloudPlatform Information section below for details.
+
+Finally, update your CloudPortal Business Manager (CPBM) to have product bundles that correspond
+to the service offerings and templates your are going to offer the user.
 
 
 ### IIS Settings
