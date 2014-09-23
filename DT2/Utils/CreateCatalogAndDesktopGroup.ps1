@@ -15,12 +15,12 @@ Parameters below could be more concise, since the data each provides overlaps.
 
 .PARAMETER  controllerAddress
 
-FQDN for DDC, e.g. "xdc1.clouddesktop.cambourne.cloud.com"
+FQDN for DDC, e.g. "xdc1.DesktopWebApp.cambourne.cloud.com"
 
 
 .PARAMETER ddcAddress
 
-FQDN and port for DDC, e.g. "xdc1.clouddesktop.cambourne.cloud.com:80"
+FQDN and port for DDC, e.g. "xdc1.DesktopWebApp.cambourne.cloud.com:80"
 
 
 .PARAMETER catalogName
@@ -54,7 +54,7 @@ Options are "Random" and "Permanent"
 
 .PARAMETER desktopDomain
 
-FQDN for the desktops, e.g. "clouddesktop.cambourne.cloud.com"
+FQDN for the desktops, e.g. "DesktopWebApp.cambourne.cloud.com"
 
 
 .PARAMETER hostingUnitName
@@ -106,7 +106,7 @@ published desktops.
 .PARAMETER userNames
 
 Array of Active Directory users and groups with access to the desktop group machines.  
-E.g. @('CloudDesktop\Domain Users')
+E.g. @('DesktopWebApp\Domain Users')
 
 
 .PARAMETER securityGroups
@@ -195,14 +195,14 @@ function LogError($msg) {
 #--- START TEST SAMPLE ---
 
 <#
-$controllerAddress="xdc1.clouddesktop.cambourne.cloud.com"
+$controllerAddress="xdc1.DesktopWebApp.cambourne.cloud.com"
 $ddcAddress=$controllerAddress+":80"
 $catalogName="TestMar12A"
 $desktopNamingScheme=$catalogName + "###"
 $desktopGrpName = $catalogName + "_desktopgrp"
 $catalogDesc="Unit Test CloudStack Catalog"
 $desktopAllocationType="Permanent"
-$desktopDomain="clouddesktop.cambourne.cloud.com"
+$desktopDomain="DesktopWebApp.cambourne.cloud.com"
 $hostingUnitName="CloudPlatformHost"
 $hostPath = 'XDHyp:\HostingUnits\' + $hostingUnitName
 $zonePath = $hostPath + '\Zone1.availabilityzone'
@@ -211,7 +211,7 @@ $templatePath=$zonePath + '\CloudDesktopVDA.template'
 $desktopCount=1
 $computerOffering=$hostPath + '\Power User.serviceoffering'
 $machineCount = 1
-$userNames = @('CloudDesktop\Administrator')
+$userNames = @('DesktopWebApp\Administrator')
 $securityGroups = $hostPath + "\default.securitygroup"
 #>
 #--- END TEST SAMPLE ---

@@ -18,7 +18,7 @@ Request results for a specific catalog. Optional
 
 .PARAMETER ddcAddress
 
-FQDN and port for DDC, e.g. "xdc1.clouddesktop.cambourne.cloud.com:80"
+FQDN and port for DDC, e.g. "xdc1.DesktopWebApp.cambourne.cloud.com:80"
 
 
 .PARAMETER catalogName
@@ -99,8 +99,8 @@ function LogError($msg) {
 #--- START TEST SAMPLE ---
 
 <#
-{"ddcAddress":"xdc1.clouddesktop.cambourne.cloud.com:80","catalogName":"Mar18TestA","desktopGrpName":"Mar18TestA_desktopgrp"}
-$ddcAddress="xdc1.clouddesktop.cambourne.cloud.com:80"
+{"ddcAddress":"xdc1.DesktopWebApp.cambourne.cloud.com:80","catalogName":"Mar18TestA","desktopGrpName":"Mar18TestA_desktopgrp"}
+$ddcAddress="xdc1.DesktopWebApp.cambourne.cloud.com:80"
 $catalogName="Apr3TestC"
 $desktopGrpName = $catalogName + "_desktopgrp"
 #>

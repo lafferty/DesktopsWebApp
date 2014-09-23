@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System.Threading;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -95,6 +96,11 @@ namespace DT2.Models
         [DataType(DataType.Text)]
         [Display(Name = "Status")]
         public string Status { get; set; }
+
+       
+        [DataType(DataType.Text)]
+        [Display(Name = "Code")]
+        public string ProductBundleCode { get; set; }
 
         public static List<Catalog> GetCatalogs()
         {
@@ -523,6 +529,7 @@ namespace DT2.Models
                 }
                 else
                 {
+
                     // Enable Windows Authentication in ASP.NET *and* IIS to ensure User.Identity is a FormsIdentity
                     LoginViewModel clientId =
                         LoginViewModel.JsonDeserialize(((FormsIdentity) HttpContext.Current.User.Identity).Ticket);
@@ -532,6 +539,13 @@ namespace DT2.Models
 
                     Task.Run(() => RunLongScript(poshScript, psargs, clientId, ndcContext,() =>
                     {
+                        // If a subscription was selected, create one subscription per desktop.
+                        // NB: in a real deployment, do not make this step optional.
+                        if (newCat.ProductBundleCode != null)
+                        {
+                            newCat.Subscribe();
+                        }
+
                         EmailAdmin(newCat, clientId);
                     }));
                 }
@@ -541,6 +555,120 @@ namespace DT2.Models
                 var errMsg = e.Message;
                 logger.Error(errMsg);
             }
+        }
+
+
+        public List<Subscription> Subscribe()
+        {
+            List<Machine> vmInfo = Machine.GetMachines(this.Name);
+
+            return this.Subscribe(vmInfo);
+        }
+
+
+        public List<Subscription> Subscribe(List<Machine> vmInfo)
+        {
+            logger.Debug("Create subscription " + this.Name + " for productBundleId " + this.ProductBundleCode);
+
+            // assert
+            if (vmInfo.Count != this.Count)
+            {
+                string errMsg = "Catalog Count and actual number of machines should be the same value.";
+                var ex = new ArgumentOutOfRangeException(errMsg);
+                logger.Error(errMsg, ex);
+                throw ex;
+            }
+
+            // Create the subscriptions.
+            var newSubs = new List<Subscription>();
+
+            // Sometimes foreach is the simplest way
+            // see http://blogs.msdn.com/b/ericlippert/archive/2009/05/18/foreach-vs-foreach.aspx
+            foreach (var vm in vmInfo)
+            {
+                logger.Debug("Creating subscription to productBundleId " + this.ProductBundleCode +
+                             " for desktop vm " + vm.MachineName);
+                var result = Subscription.Create(this.ProductBundleCode, vm.MachineName, this.Name);
+                newSubs.Add(result);
+            }
+
+            // Wait for subscriptions to ACTIVATE
+            Subscription.WaitForSubscriptionsToBeActive(newSubs);
+
+            // use 'Zip' to avoid need for tracking iterators in a loop...
+            // See http://stackoverflow.com/a/2249415/939250
+            var attachedSubs = newSubs.Zip(vmInfo, (sub, machine) => sub.Attach(machine.VmId, machine.MachineName));
+
+            // assert
+            if (attachedSubs.Count() != newSubs.Count)
+            {
+                string errMsg = "Zipped subscriptions and machine IDs, output subscription count did not matching input count.";
+                var ex =  new ArgumentOutOfRangeException(errMsg);
+                logger.Error(errMsg, ex);
+                throw ex;
+            }
+            return newSubs;
+        }
+        
+
+        public static List<string> EnumDesktopNames(Catalog catalog)
+        {
+            List<string> desktopNames = new List<string>();
+            for (int i = 0; i < catalog.Count; i++)
+            {
+                string desktopName = String.Format("{0}{1,3:D3}",
+                                         catalog.Name,
+                                         i);
+                desktopNames.Add(desktopName);
+            }
+            return desktopNames;
+        }
+
+        public bool Unsubscribe()
+        {
+            List<Machine> vmInfo = Machine.GetMachines(this.Name);
+
+            return this.Unsubscribe(vmInfo);
+        }
+
+
+        public bool Unsubscribe(List<Machine> vmInfo)
+        {
+            bool deletedSubs = false;
+            logger.Debug("Remove subscriptions for  " + this.Name);
+
+            var allSubs = Subscription.GetSubscriptions();
+
+            // assert that we have all the subscriptions
+            // TODO: Change StartsWith, use CatalogName instead.
+            var newSubs = from sub in allSubs where (!string.IsNullOrEmpty(sub.HostName) && sub.HostName.StartsWith(this.Name) && !sub.State.Equals("EXPIRED")) select sub;
+            var matches = newSubs.Count();
+
+            if (matches != vmInfo.Count)
+            {
+                logger.Error("Miss match: " + vmInfo.Count + " machines in catalog and " + matches + " subscriptions: ");
+            }
+
+            foreach (var machine in vmInfo)
+            {
+                var oldSubs = from sub in newSubs where sub.HostName.Equals(machine.MachineName) select sub;
+                
+                // assert
+                matches = oldSubs.Count();
+                if (matches != 1)
+                {
+                    logger.Error("Found " + matches + " for the desktop " + machine.MachineName);
+                }
+                if (matches == 0)
+                {
+                    continue;
+                }
+
+                Subscription.Delete(oldSubs.First());
+                deletedSubs = true;
+            }
+
+            return deletedSubs;
         }
 
         public static void AddMachineToCatalog(Catalog newCat)
@@ -605,8 +733,8 @@ namespace DT2.Models
                 logger.Info("Email " + clientId.UserName + " to say that " + newCat.Name + " is done. ");
                 var userAddr = new System.Net.Mail.MailAddress(adminEmail);
                 var mailMsg = new System.Net.Mail.MailMessage();
-                mailMsg.Subject = "Desktop Catalog " + newCat.Name + " is ready!";
-                mailMsg.Body = "Finished creating " + newCat.Name + ".  You access it from " +
+                mailMsg.Subject = "Your " + newCat.Name + " desktop is ready!";
+                mailMsg.Body = "Your " + newCat.Name + " desktop is available for use.    \nClick on the link below to access your desktop.  \n" +
                                DT2.Properties.Settings.Default.XenDesktopStoreFrontUrl.ToString();
                 mailMsg.From = userAddr;
                 mailMsg.CC.Add(adminEmail);
@@ -663,6 +791,14 @@ namespace DT2.Models
         {
             try
             {
+                List<Catalog> catToDelList = Catalog.GetCatalog(name);
+                // assert
+                if (catToDelList.Count != 1)
+                {
+                    logger.Error("Problem deleting catalog " + name + ", because there are " + catToDelList.Count +
+                                 " catalogs of that name");
+                }
+                var catToDel = catToDelList.First();
                 string script = ScriptNames.DeleteDesktopGroupScript;
                 logger.Info("Deleting Catalog corresponding with name " + name);
                 Dictionary<string, object> psargs = new Dictionary<string, object>();
@@ -679,6 +815,9 @@ namespace DT2.Models
                     LoginViewModel.JsonDeserialize(((FormsIdentity) HttpContext.Current.User.Identity).Ticket);
                 string ndcContext = log4net.NDC.Pop();
                 log4net.NDC.Push(ndcContext);
+
+                // Remove subscriptions for the desktops before the machine list disappears
+                catToDel.Unsubscribe();
 
                 Task.Run(() => RunLongScript(poshScript, psargs, clientId, ndcContext));
             }
@@ -737,7 +876,7 @@ namespace DT2.Models
 
 
         /// <summary>
-        /// Converts WebApp values for DesktopType to XenDesktop values.
+        /// Converts DaaS values for DesktopType to XenDesktop values.
         /// TODO: update for new desktop types
         /// </summary>
         /// <param name="name"></param>

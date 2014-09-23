@@ -85,7 +85,7 @@ IIS Authentication
 * Enable Anonymous Authentication
 * Disable other types of authentication
 
-	
+    
 ASP.NET Config:
 
 Enable WindowsIdentity flow between threads.  This allows the WebApp to execute scripts using an 
@@ -170,7 +170,7 @@ To keep WebApp deployment simple, the a XenDesktop HostingUnit corresponding to 
 Domain for the XenDesktop controller.  E.g. 
 
 ```xml
-clouddesktop.cambourne.cloud.com
+desktopwebapp.cambourne.cloud.com
 ```
 
 
@@ -179,7 +179,7 @@ clouddesktop.cambourne.cloud.com
 The FQDN and port of the XenDesktop controller.  E.g. 
 
 ```xml
-xdc1.clouddesktop.cambourne.cloud.com:80
+xdc1.desktopwebapp.cambourne.cloud.com:80
 ```
 
 
@@ -188,7 +188,7 @@ xdc1.clouddesktop.cambourne.cloud.com:80
 The FQDN of the XenDesktop controller.  E.g. 
 
 ```xml
-clouddesktop.cambourne.cloud.com
+desktopwebapp.cambourne.cloud.com
 ```
 
 In hindsight, XenDesktopAdminAddress and XenDesktopDomain could have been derived from the XenDesktopDDC setting.
@@ -208,11 +208,6 @@ Zone1
 The GUID for the CloudStack zone in which desktops will run.  Used for image management during the 
 upload.
 
-
-*TestDisableCatalogCreate*
-
-Used by developers wishing to disable the execution of the desktop group creation script.
- 
 
 *XenDesktopStoreFrontUrl*
 
@@ -238,7 +233,7 @@ Path to the resource AD, which is the AD controller for the domain in which the 
 controller is installed.  The path is specified using LDAP standards.  E.g. 
 
 ```xml
-LDAP://CN=users,DC=clouddesktop,DC=cambourne,DC=cloud,DC=com
+LDAP://CN=users,DC=desktopwebapp,DC=cambourne,DC=cloud,DC=com
 ```
 
 An explanation of the syntax used above can be found onlien.  e.g. http://social.technet.microsoft.com/wiki/contents/articles/1773.ldap-path-active-directory-distinguished-and-relative-distinguished-names.aspx
@@ -256,7 +251,7 @@ security groups.  For this reason, the setting can be left blank.
 Folder containing the powershell scripts used to control XenDesktop.  E.g. 
 
 ```xml
-C:\inetpub\wwwroot\Citrix\CloudDesktop\Utils
+C:\inetpub\wwwroot\Citrix\DesktopWebApp\Utils
 ```
 
 Explicitly specifying the folder is useful when using a development web server that separates 
@@ -281,6 +276,66 @@ executable
 
 The list of valid options is given by the CloudStack API.  
 For example, see http://cloudstack.apache.org/docs/api/apidocs-4.3/user/listTemplates.html 
+
+
+Next are configuration setting for integrating with CloudPortal Business Manager:
+
+
+*CPBMEndPoint*
+
+URL for CPBM endpoint.
+
+```xml
+http://pmlab.cpbm.citrite.net/portal/api
+```
+
+
+*CPBMApiKey*
+
+API key for tenant's CPBM account.
+
+```xml
+wNRXbfi96S3rLknkmG3xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1e7UDIw
+```
+
+
+*CPBMSecretKey*
+
+Secret key for tenant's CPBM account.
+
+```xml
+6AYwvDsp9r6sxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxL_vA
+```
+
+
+*CPBMServiceInstanceName*
+
+Secret key for tenant's CPBM account.
+
+```xml
+IaaS US West
+```
+
+
+*TestDisableCatalogCreate*
+
+Used by developers wishing to disable the execution of the desktop group creation script on XenDesktop.
+ 
+
+*TestDisableImageFetch*
+
+Used by developers wishing to disable the requests to CloudStack for template images.
+ 
+
+*TestDisableProductBundleGet*
+
+Used by developers wishing to disable the requests to CPBM for a product bundle.
+ 
+
+*TestDisableServiceOfferingGet*
+
+Used by developers wishing to disable the requests to XenDesktop for a details of a compute service
+offering.
 
 
 Finally, email alerts generated when a desktop group is created are sent using the SMTP settings in

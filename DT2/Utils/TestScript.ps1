@@ -35,9 +35,9 @@ Param (
 Add-pssnapin citrix.*
 
 <# test sample
-$controllerAddress="xdc1.clouddesktop.cambourne.cloud.com"
+$controllerAddress="xdc1.DesktopWebApp.cambourne.cloud.com"
 $ddcAddress=$controllerAddress+":80"
-$desktopDomain="clouddesktop.cambourne.cloud.com"
+$desktopDomain="DesktopWebApp.cambourne.cloud.com"
 #>
 
 $error.clear()

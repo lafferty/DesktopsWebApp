@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Data;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Routing;
 using DotNet.Highcharts;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Newtonsoft.Json;
 
 namespace DT2.Controllers
 {
@@ -259,51 +261,6 @@ namespace DT2.Controllers
             }
         }
 
-        public JsonResult GetValidTemplates(string desktopType)
-        {
-            var templates = Template.GetTemplates(CloudStackClient);
-
-            List<XenDesktopInventoryItem> validTemplates = new List<XenDesktopInventoryItem>();
-
-                foreach (Template template in templates)
-                {
-
-                    if (desktopType == Catalog.PublishedDesktops && template.DesktopType == Template.PublishedDesktopType)
-                    {
-                        validTemplates.Add(new XenDesktopInventoryItem()
-                        {
-                            Id = template.InventoryPath,
-                            Name = template.Name
-                        });
-                    }
-                    else if (desktopType != Catalog.PublishedDesktops && template.DesktopType != Template.PublishedDesktopType)
-                    {
-                        validTemplates.Add(new XenDesktopInventoryItem()
-                        {
-                            Id = template.InventoryPath,
-                            Name = template.Name
-                        });
-                    }
-                }
-                return Json(validTemplates);
-        }
-
-        [HttpPost]
-        public ActionResult GetUsers(string query)
-        {
-            using (log4net.NDC.Push(Guid.NewGuid().ToString()))
-            {
-                logger.Debug("User search request for pattern " + query);
-
-                if (!query.EndsWith("*"))
-                {
-                    query += "*";
-                }
-                var users = Catalog.GetActiveDirectoryUsers(query);
-                return Json(users);
-            }
-        }
-
         [HttpPost]
         public ActionResult DesktopGroupsAdd(Catalog newItem)
         {
@@ -314,7 +271,7 @@ namespace DT2.Controllers
                 try
                 {
                     var networks = XenDesktopInventoryItem.GetNetworkList();
-                    newItem.Network = networks[networks.Count -1].Id;
+                    newItem.Network = networks[networks.Count - 1].Id;
                     logger.Debug("Using network " + newItem.Network);
                     if (XenDesktopInventoryItem.ZoneSupportsSecurityGroups())
                     {
@@ -337,6 +294,188 @@ namespace DT2.Controllers
                     logger.Error(errMsg, ex);
                     return View();
                 }
+            }
+        }
+
+        public ActionResult DesktopGroupsAddEx()
+        {
+            using (log4net.NDC.Push(Guid.NewGuid().ToString()))
+            {
+                logger.Debug("Request for Create DesktopGroups page with billing");
+                LoginViewModel clientId =
+                    LoginViewModel.JsonDeserialize(((FormsIdentity)User.Identity).Ticket);
+                ViewBag.Domain = clientId.DomainName;
+                // ViewBag offers typeless mechanism of exposing objects to the view page
+                ViewBag.Templates = new List<Template>();
+
+                // Templates come from AJAX call
+                //                ViewBag.Templates = Template.GetTemplates(CloudStackClient);
+                ViewBag.DesktopTypes = Catalog.DesktopTypeList;
+                ViewBag.ComputeOfferings = XenDesktopInventoryItem.GetServiceOfferingList();
+                ViewBag.AvailableUsers = Catalog.GetActiveDirectoryUsers("*");
+
+                // ProductBundle list comes from CPBM
+                if (DT2.Properties.Settings.Default.TestDisableProductBundleGet)
+                {
+                    // Dev scaffolding:
+                    dynamic response = JsonConvert.DeserializeObject(ProductBundle.SampleCatalogJson2);
+                    ViewBag.Bundles = DT2.Models.ProductBundle.ParseJson(response);
+                }
+                else
+                {
+                    var bundles = ProductBundle.GetBundles();  
+
+                    // verify that each bundle has a monthly and one time charge.
+                    foreach (var item in bundles)
+                    {
+                        if (item.RateCardCharges.Count < 2)
+                        {
+                            item.RateCardCharges.Add("0.00");
+                        }
+                        if (item.RateCardCharges.Count < 2)
+                        {
+                            item.RateCardCharges.Add("0.00");
+                        }
+                    }
+                    ViewBag.Bundles = bundles;                   
+                }
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DesktopGroupsAddEx(Catalog newItem)
+        {
+            using (log4net.NDC.Push(Guid.NewGuid().ToString()))
+            {
+                var dbgMsg = "Request to Create Desktop group " + newItem.Name + " data: " + newItem;
+                logger.Debug(dbgMsg);
+                try
+                {
+                    var networks = XenDesktopInventoryItem.GetNetworkList();
+                    newItem.Network = networks[networks.Count - 1].Id;
+                    logger.Debug("Using network " + newItem.Network);
+                    if (XenDesktopInventoryItem.ZoneSupportsSecurityGroups())
+                    {
+                        var securityGroups = XenDesktopInventoryItem.GetSecurityGroupList();
+                        newItem.SecurityGroup = securityGroups[0].Id;
+                        logger.Debug("Using security group " + newItem.SecurityGroup);
+                    }
+
+                    Catalog.CreateCatalog(newItem);
+                    newItem.Status = CreateStatus;
+
+                    // Network names can include an apostrophe, which triggers code that screens for an SQL injection attack,
+                    // so we null out the network
+                    newItem.Network = null;
+                    return RedirectToAction("DesktopGroups", newItem);
+                }
+                catch (System.Exception ex)
+                {
+                    var errMsg = "Exception when starting create for " + newItem + " Message: " + ex.Message;
+                    logger.Error(errMsg, ex);
+                    return View();
+                }
+            }
+        }
+
+        public JsonResult GetValidTemplates(string desktopType)
+        {
+            var templates = Template.GetTemplates(CloudStackClient);
+
+            List<XenDesktopInventoryItem> validTemplates = new List<XenDesktopInventoryItem>();
+
+            // Dev sample
+            if (DT2.Properties.Settings.Default.TestDisableImageFetch)
+            {
+                templates.Clear();
+                templates.Add(
+                    new Template()
+                    {
+                        InventoryPath = @"XDHyp:\HostingUnits\CloudResourcesJS\Zone1.availabilityzone\Windows 7.template",
+                        Name = "Windows 7",
+                        DesktopType = Template.VirtualDesktopType
+                    });
+                templates.Add(
+                    new Template()
+                    {
+                        InventoryPath = @"XDHyp:\HostingUnits\CloudResourcesJS\Zone1.availabilityzone\CloudDesktopVDA.template",
+                        Name = "CloudDesktopVDA",
+                        DesktopType = Template.VirtualDesktopType
+                    });
+                templates.Add(
+                    new Template()
+                    {
+                        InventoryPath = @"XDHyp:\HostingUnits\CloudResourcesJS\Zone1.availabilityzone\Windows 2012R2.template",
+                        Name = "Windows 2012R2",
+                        DesktopType = Template.PublishedDesktopType
+                    });
+                templates.Add(
+                    new Template()
+                    {
+                        InventoryPath = @"XDHyp:\HostingUnits\CloudResourcesJS\Zone1.availabilityzone\CloudDesktopVDASvr.template",
+                        Name = "CloudDesktopVDASvr",
+                        DesktopType = Template.PublishedDesktopType
+                    });
+            }
+
+            foreach (Template template in templates)
+                {
+
+                    if (desktopType == Catalog.PublishedDesktops && template.DesktopType == Template.PublishedDesktopType)
+                    {
+                        validTemplates.Add(new XenDesktopInventoryItem()
+                        {
+                            Id = template.InventoryPath,
+                            Name = template.Name,
+                            Uuid = template.Id
+                        });
+                    }
+                    else if (desktopType != Catalog.PublishedDesktops && template.DesktopType != Template.PublishedDesktopType)
+                    {
+                        validTemplates.Add(new XenDesktopInventoryItem()
+                        {
+                            Id = template.InventoryPath,
+                            Name = template.Name,
+                            Uuid = template.Id
+                        });
+                    }
+                }
+                return Json(validTemplates);
+        }
+
+        [HttpPost]
+        public ActionResult GetUsers(string query)
+        {
+            using (log4net.NDC.Push(Guid.NewGuid().ToString()))
+            {
+                logger.Debug("User search request for pattern " + query);
+
+                if (!query.EndsWith("*"))
+                {
+                    query += "*";
+                }
+                var users = Catalog.GetActiveDirectoryUsers(query);
+                return Json(users);
+            }
+        }
+
+        public ActionResult DesktopGroupMachineRestart(string machineName, string catalogName)
+        {
+            using (log4net.NDC.Push(Guid.NewGuid().ToString()))
+            {
+                logger.Debug("Restarting Machine " + machineName + " from Desktop Group" + catalogName);
+
+                if (machineName == null)
+                {
+                    Machine.Restart(machineName);
+                    logger.Debug("Restarted Machine " + machineName + " from Desktop Group" + catalogName);
+
+                    // TODO: need new HTTPGet that takes the machineName, and sets the machine state to pending.
+                    return RedirectToAction("DesktopGroupsDetails", new RouteValueDictionary( new {name = catalogName, pendingMachine = machineName}) );
+                }
+
+                return RedirectToAction("DesktopGroupsDetails", new RouteValueDictionary( new {name = catalogName}) );
             }
         }
 

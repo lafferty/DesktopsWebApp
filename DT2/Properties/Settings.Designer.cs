@@ -25,8 +25,8 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("G379F22wYG_ISyG4Y-0saikSyUQNf9hVozwcep-LqsGNRvSBx81bN-mZ1bDyckMYNItYypIfzjU-MlFrS" +
-            "5IEIw")]
+        [global::System.Configuration.DefaultSettingValueAttribute("dF5PDBafces79JW3AXo3o98dcn0v1jrfjNuN04h0eJ_eDA0zLZuSXey_cJ--FRjWonG5lHgxKaKriYxQS" +
+            "WIF0A")]
         public string CloudStackSecretKey {
             get {
                 return ((string)(this["CloudStackSecretKey"]));
@@ -35,8 +35,8 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NTbOqdGSM2KWzS0GIMO9fBO6TiKb2oEKo59t7hmPWNna4rQtftX3sarCO-sAMXfL8l3zm55mND__53bV-" +
-            "wyZrA")]
+        [global::System.Configuration.DefaultSettingValueAttribute("m4JGw31IgcvabsE9QwWqrHFukXK_LmYbaunFx2rApFcfZVoxJBNed0RgZ0suI3gksciAsoaAQXAB_zbTE" +
+            "cRtXw")]
         public string CloudStackApiKey {
             get {
                 return ((string)(this["CloudStackApiKey"]));
@@ -54,7 +54,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("xdc1.clouddesktop.cambourne.cloud.com:80")]
+        [global::System.Configuration.DefaultSettingValueAttribute("xdc1.DesktopWebApp.cambourne.cloud.com:80")]
         public string XenDesktopAdminAddress {
             get {
                 return ((string)(this["XenDesktopAdminAddress"]));
@@ -72,7 +72,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("clouddesktop.cambourne.cloud.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DesktopWebApp.cambourne.cloud.com")]
         public string XenDesktopDomain {
             get {
                 return ((string)(this["XenDesktopDomain"]));
@@ -81,7 +81,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("xdc1.clouddesktop.cambourne.cloud.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("xdc1.DesktopWebApp.cambourne.cloud.com")]
         public string XenDesktopDDC {
             get {
                 return ((string)(this["XenDesktopDDC"]));
@@ -90,7 +90,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Zone1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Advanced-zone")]
         public string XenDesktopAvailabilityZone {
             get {
                 return ((string)(this["XenDesktopAvailabilityZone"]));
@@ -99,7 +99,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2d1fe3c7-33bd-4e02-94a9-55ba34321942")]
+        [global::System.Configuration.DefaultSettingValueAttribute("c079a19f-7eb1-463c-b5bc-13d508584d5a")]
         public string CloudStackZoneId {
             get {
                 return ((string)(this["CloudStackZoneId"]));
@@ -126,7 +126,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://192.168.2.1:8080/client/api")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://pmlab.cpbm.citrite.net/portal/client/apis/CCPDIXON")]
         public string CloudStackUrl {
             get {
                 return ((string)(this["CloudStackUrl"]));
@@ -135,7 +135,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("LDAP://CN=users,DC=clouddesktop,DC=cambourne,DC=cloud,DC=com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("LDAP://CN=users,DC=DesktopWebApp,DC=cambourne,DC=cloud,DC=com")]
         public string LdapPath {
             get {
                 return ((string)(this["LdapPath"]));
@@ -153,7 +153,7 @@ namespace DT2.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\administrator.CLOUDDESKTOP\\Documents\\GitHub\\CloudDesktop\\DT2\\Utils")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\administrator.DesktopWebApp\\Documents\\GitHub\\DesktopWebApp\\DT2\\Utils")]
         public string PowerShellScriptsFolder {
             get {
                 return ((string)(this["PowerShellScriptsFolder"]));
@@ -175,6 +175,71 @@ namespace DT2.Properties {
         public string templatefilter {
             get {
                 return ((string)(this["templatefilter"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://pmlab.cpbm.citrite.net/portal/api")]
+        public global::System.Uri CPBMEndPoint {
+            get {
+                return ((global::System.Uri)(this["CPBMEndPoint"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("wNRXbfi96S3rLknkmG3t0qwGkQHX32RmQcAkvUVlAVGxetveDHXKYKoI5FZYlFfQ05k1QtbTgtAdc_F1e" +
+            "7UDIw")]
+        public string CPBMApiKey {
+            get {
+                return ((string)(this["CPBMApiKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6AYwvDsp9r6s-IgT4R9PUyynbb7h5Vo-3_hgwTTiBSHcO_lCOzrww_aUC-uhcEXEYGANvDjeGSwoqC6u5" +
+            "GL_vA")]
+        public string CPBMSecretKey {
+            get {
+                return ((string)(this["CPBMSecretKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TestDisableImageFetch {
+            get {
+                return ((bool)(this["TestDisableImageFetch"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("IaaS US West")]
+        public string CPBMServiceInstanceName {
+            get {
+                return ((string)(this["CPBMServiceInstanceName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TestDisableProductBundleGet {
+            get {
+                return ((bool)(this["TestDisableProductBundleGet"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TestDisableServiceOfferingGet {
+            get {
+                return ((bool)(this["TestDisableServiceOfferingGet"]));
             }
         }
     }

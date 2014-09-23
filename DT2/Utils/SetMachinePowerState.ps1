@@ -12,7 +12,7 @@ Uses Get-BrokerMachine from XenDesktop SDK, see http://support.citrix.com/proddo
 
 .PARAMETER ddcAddress
 
-FQDN and port for DDC, e.g. "xdc1.clouddesktop.cambourne.cloud.com:80"
+FQDN and port for DDC, e.g. "xdc1.DesktopWebApp.cambourne.cloud.com:80"
 
 
 .PARAMETER machineName

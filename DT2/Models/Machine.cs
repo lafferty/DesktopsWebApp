@@ -151,6 +151,10 @@ namespace DT2.Models
         public Int32 Uid { get; set; }
 
 
+        [Display(Name = "HostVmId")]
+        [DataType(DataType.Text)]
+        public string VmId { get; set; }
+        
         // TODO: are Catalogs available limited to this user?
         public static List<Machine> GetMachines(string catalogName)
         {
@@ -194,6 +198,7 @@ namespace DT2.Models
                     newMachine.SessionCount = (int)(item.Members["SessionCount"].Value ?? string.Empty);
                     newMachine.SupportedPowerActions = (string[])(item.Members["SupportedPowerActions"].Value ?? new String[0]);
                     newMachine.Uid = (int)(item.Members["Uid"].Value ?? string.Empty);
+                    newMachine.VmId = (string)(item.Members["HostedMachineId"].Value ?? string.Empty);
 
                     var newMachineJson = Newtonsoft.Json.JsonConvert.SerializeObject(newMachine);
                     logger.Info("Discovered Machine: " + newMachineJson);
@@ -208,5 +213,37 @@ namespace DT2.Models
 
             return result;
         }
+
+        internal static void Restart(string machineName)
+        {
+            try
+            {
+                Dictionary<string, object> psargs = new Dictionary<string, object>();
+                var getDetailsScript = new PsWrapper(Path.Combine(DT2.Properties.Settings.Default.PowerShellScriptsFolder, ScriptNames.SetMachinePowerState));
+
+
+                string powerAction = "Restart";
+                logger.Info("Restarting machine " + machineName + " by sending poweraction " + powerAction);
+                psargs.Add("ddcAddress", DT2.Properties.Settings.Default.XenDesktopAdminAddress);
+                psargs.Add("machineName", machineName);
+                psargs.Add("powerAction", powerAction);
+
+
+                var jsonEquiv = Newtonsoft.Json.JsonConvert.SerializeObject(psargs);
+                logger.Info("Calling " + ScriptNames.GetMachines + " with args: " + jsonEquiv);
+
+                getDetailsScript.IgnoreExceptions.Add(PoshSdkConsts.PartialDataException);
+
+                LoginViewModel clientId =
+                    LoginViewModel.JsonDeserialize(((FormsIdentity)HttpContext.Current.User.Identity).Ticket);
+                var psCats = getDetailsScript.RunPowerShell(psargs, clientId);
+            }
+            catch (Exception e)
+            {
+                var errMsg = e.Message;
+                logger.Error(errMsg);
+            }
+        }
+
     }
 }

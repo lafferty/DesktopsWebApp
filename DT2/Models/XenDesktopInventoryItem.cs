@@ -32,6 +32,11 @@ namespace DT2.Models
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
+        [Display(Name = "Uuid")]
+        [DataType(DataType.Text)]
+        public string Uuid { get; set; }
+
+
         public static int Compare(XenDesktopInventoryItem x, XenDesktopInventoryItem y)
         {
             return x.Name.CompareTo(y.Name);
@@ -67,6 +72,15 @@ namespace DT2.Models
         public static List<XenDesktopInventoryItem> GetServiceOfferingList()
         {
             var result = new List<XenDesktopInventoryItem>();
+
+            if (DT2.Properties.Settings.Default.TestDisableServiceOfferingGet)
+            {
+                result.Add(new XenDesktopInventoryItem() { Name = "TinyInstance", Uuid = "f1a234ae-1d5a-4fbc-817f-40c0c65e4e32", Id = @"XDHyp:\HostingUnits\CloudPlatformHost\TinyInstance.serviceoffering" });
+                result.Add(new XenDesktopInventoryItem() { Name = "SmallInstance", Uuid = "68416055-1d04-4e30-a290-740b8871fab0", Id = @"XDHyp:\HostingUnits\CloudPlatformHost\SmallInstance.serviceoffering" });
+                result.Add(new XenDesktopInventoryItem() { Name = "MediumInstance", Uuid = "9ad659d8-fe83-409f-8f65-2af4e4c7efb9", Id = @"XDHyp:\HostingUnits\CloudPlatformHost\MediumInstance.serviceoffering" });
+                result.Add(new XenDesktopInventoryItem() { Name = "LargeInstance", Uuid = "567c52c9-0e1e-4def-ac49-396d9f1c2c98", Id = @"XDHyp:\HostingUnits\CloudPlatformHost\LargeInstance.serviceoffering" });
+                return result;
+            }
             try
             {
                 var psNets = InvokeScript(ScriptNames.GetServiceOfferings, XenDesktopHostingUnitPath);
@@ -81,14 +95,16 @@ namespace DT2.Models
                     {
                         continue;
                     }
-                    string id = (string) item.Members["FullPath"].Value;
+                    string uuid = (string)item.Members["Id"].Value;
+                    string id = (string)item.Members["FullPath"].Value;
                     var newRsrc = new XenDesktopInventoryItem()
                     {
                         Name = name,
-                        Id = id
+                        Id = id,
+                        Uuid = uuid
                     };
 
-                    logger.Debug("Adding " + name + " Id " + id + " to the list of resources");
+                    logger.Debug("Adding " + name + " Id " + id + " to theb list of resources");
                     result.Add(newRsrc);
                 } // End foreach.
 
@@ -97,11 +113,13 @@ namespace DT2.Models
                     foreach (PSObject item in psNets)
                     {
                         string name = (string) item.Members["Name"].Value;
-                        string id = (string) item.Members["FullPath"].Value;
+                        string uuid = (string)item.Members["Id"].Value;
+                        string id = (string)item.Members["FullPath"].Value;
                         var newRsrc = new XenDesktopInventoryItem()
                         {
                             Name = name,
-                            Id = id
+                            Id = id,
+                            Uuid = uuid
                         };
 
                         logger.Debug("Adding " + name + " Id " + id + " to the list of resources");

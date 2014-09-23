@@ -29,8 +29,8 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Conditions.wxi" />
     <Content Include="000_XenDesktop_Combo_All.ico" />
+    <Content Include="Conditions.wxi" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DT2\DT2.csproj">

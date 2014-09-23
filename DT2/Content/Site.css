@@ -15,7 +15,9 @@ footer {
 .body-content {
     
 }
-input {
+/* These break the Twitter Bootstrap grid capabilities
+    
+    input {
     max-width: 280px;
 }
 select {
@@ -23,7 +25,7 @@ select {
 }
 textarea {
     max-width: 280px;
-}
+}*/
 .field-validation-error {
     color: rgb(185, 74, 72);
 }
@@ -231,13 +233,13 @@ input[type='checkbox'].input-validation-error {
     margin-bottom: 0;
 }
 .form-horizontal .control-label {
-    margin: 3px 0px 0px; padding: 0px; width: 200px; text-align: left; font-size: 14px; font-weight: normal;
+    margin: 3px 0px 0px; font-weight: normal;
 }
 .form-group input[type='text'], .form-group input[type='url'], .form-group textarea, select {
     padding: 4px; border-radius: 3px; border: 1px solid rgb(204, 204, 204); border-image: none; color: rgb(70, 70, 70);
 }
 .form-group input, .form-group select {
-    width: 400px;
+    width: 100%;
 }
 .form-group input[type="submit"], .form-group input[type="button"] {
     width: auto !important;
@@ -284,4 +286,60 @@ h5 {
 }
 .piechart_container {
     overflow: hidden;
+}
+
+footer {
+    margin-top: 10px;
+    border-top: 3px solid rgb(66, 139, 202);
+}
+
+.btn + .btn {
+    margin-right: 10px;
+}
+
+.form-horizontal {
+    background: none; 
+}
+
+.form-horizontal h3 {
+    margin-top: -10px;
+    background: rgb(66, 139, 202);
+    color: #FFF;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.form-horizontal .col-md-3 {
+    width: 30%;
+}
+.form-horizontal .col-md-8 {
+    width: 70%;
+}
+
+.bg-warning, .bg-success {
+    background: none;
+}
+
+.col-md-offset-1 {
+    margin-left: 0; 
+    background: #f5f5f5;
+    color: #666;
+    padding-bottom: 10px;
+}
+
+.col-md-offset-1 h3 {
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-top: 10px;
+    border-bottom: 1px dotted #999;
+    padding-bottom: 5px;
+    color: #444;
+}
+
+.bg-success h3 {
+    margin-top: 25px;
+}
+
+.form-group .control-label.col-md-3 {
+    text-align: left;
 }
